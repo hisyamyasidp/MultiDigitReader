@@ -39,7 +39,9 @@ CV UAS/
 │   ├── train_cnn.py      # [5] Script pelatihan Model A & checkpointing
 │   ├── train_mobilenet.py# [6] Script pelatihan Model B & checkpointing
 │   ├── evaluate.py       # [7] Evaluasi kuantitatif lengkap (P, R, F1, Latensi, CM)
-│   └── webcam_app.py     # [8] Aplikasi inferensi real-time webcam multi-digit
+│   ├── webcam_app.py     # [8] Aplikasi inferensi real-time webcam multi-digit (PyTorch)
+│   ├── export_onnx.py    # [9] Konversi model PyTorch (.pth) ke format ONNX (.onnx)
+│   └── webcam_app_onnx.py# [10] Aplikasi inferensi live webcam via ONNX Runtime (Bonus Deployment)
 ├── extract_dataset.py    # Ekstraksi & kurasi dataset mandiri dari video rekaman
 ├── requirements.txt      # Daftar dependensi library
 └── README.md             # Dokumentasi teknis komprehensif
@@ -197,10 +199,20 @@ Pengujian dilakukan pada **1.664 citra data uji independen (Test Set)** yang tid
 
 ## 6. Panduan Menjalankan Program & Kontrol Demo Live
 
-### Menjalankan Demo Live Webcam Multi-Digit
+### Menjalankan Demo Live Webcam Multi-Digit (PyTorch)
 ```bash
 python src/webcam_app.py
 ```
+
+### Menjalankan Demo Live Webcam Multi-Digit via ONNX Runtime (Poin Bonus Deployment)
+```bash
+# 1. Konversi model PyTorch ke format ONNX
+python src/export_onnx.py
+
+# 2. Jalankan inferensi webcam murni dengan ONNX Runtime (tanpa PyTorch)
+python src/webcam_app_onnx.py
+```
+* **Keunggulan ONNX Runtime:** Inferensi sangat ringan di CPU, hemat memori RAM, dan membuktikan kesiapan deployment di lingkungan nyata (*Edge AI*). Memenuhi kriteria **Poin Bonus Optimasi Deployment (+5% s.d. +10%)**.
 * **Cara Pengujian:** Tulis 2 sampai 4 digit angka acak (misal: `2026`, `485`) di kertas putih, lalu dekatkan ke dalam kotak ROI di layar pada jarak 30–50 cm.
 * **Tombol `m`:** Mengganti model inferensi secara langsung (*on-the-fly*) antara **Custom CNN** dan **MobileNetV2**.
 * **Tombol `c`:** Membersihkan riwayat buffer prediksi (*reset sequence*).
